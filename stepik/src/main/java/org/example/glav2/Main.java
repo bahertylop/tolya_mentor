@@ -12,5 +12,8 @@ public class Main {
         System.out.println(true == false);
         System.out.println(false == true);
         System.out.println(false == false);
+        long l = 23453456l;
+        float f = l;
+        System.out.println();
     }
 }

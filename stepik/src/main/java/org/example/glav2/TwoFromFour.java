@@ -25,22 +25,30 @@ public class TwoFromFour {
 
         String str = new TwoFromFour().printTextPerRole(roles, textLines);
         System.out.println(str);
-
+        booleanExpression2(true, true, true, true);
     }
 
     public static boolean booleanExpression(boolean a, boolean b, boolean c, boolean d) {
-        return (a && b && !c && !d) || (a && c && !b && !d) || (a && d && !c && !b) || (b && c && !a && !d) || (b && d && !a && !c) || (c && d && !a && !b);
+        return (a && b && !c && !d) ||
+                (a && c && !b && !d) ||
+                (a && d && !c && !b) ||
+                (b && c && !a && !d) ||
+                (b && d && !a && !c) ||
+                (c && d && !a && !b);
+    }
+
+    public static boolean booleanExpression2(boolean a, boolean b, boolean c, boolean d) {
+        int countTrue = 0;
+        if (a) countTrue++;
+        if (b) countTrue++;
+        if (c) countTrue++;
+        if (d) countTrue++;
+
+        return countTrue == 2;
     }
 
     public static int leapYearCount(int year) {
-        int count = 0;
-        for (int i = 1; i < year + 1; i++) {
-            if ((i % 100 != 0 && i % 4 == 0) || i % 400 == 0) {
-                count++;
-            }
-        }
-
-        return count;
+        return year / 4 - year / 100 + year / 400;
     }
 
     public static boolean doubleExpression(double a, double b, double c) {
@@ -75,12 +83,8 @@ public class TwoFromFour {
         String pattern = "[^a-zA-Z0-9]";
 
         String str = text.replaceAll(pattern, "").toLowerCase();
-        for (int i = 0; i < str.length() / 2; i++) {
-            if (str.charAt(i) != str.charAt(str.length() - 1 - i)) {
-                return false;
-            }
-        }
-        return true;
+        String reverseStr = new StringBuilder(str).reverse().toString();
+        return str.equals(reverseStr);
     }
 
     public static BigInteger factorial(int value) {
@@ -100,29 +104,47 @@ public class TwoFromFour {
         int a1Ind = 0;
         int a2Ind = 0;
         for (int i = 0; i < newLength; i++) {
-            Integer num1 = null;
+            int a1Elem, a2Elem;
             if (a1Ind < a1.length) {
-                num1 = a1[a1Ind];
-            }
-            Integer num2 = null;
-            if (a2Ind < a2.length) {
-                num2 = a2[a2Ind];
-            }
-            if (num1 == null) {
-                newArr[i] = num2;
-                a2Ind++;
-            } else if (num2 == null) {
-                newArr[i] = num1;
-                a1Ind++;
+                a1Elem = a1[a1Ind];
             } else {
-                if (num1 > num2) {
-                    newArr[i] = num2;
-                    a2Ind++;
-                } else {
-                    newArr[i] = num1;
-                    a1Ind++;
-                }
+                a1Elem = Integer.MAX_VALUE;
             }
+            if (a2Ind < a2.length) {
+                a2Elem = a2[a2Ind];
+            } else {
+                a2Elem = Integer.MAX_VALUE;
+            }
+
+            if (a1Elem > a2Elem) {
+                newArr[i] = a2Elem;
+                a2Ind++;
+            } else {
+                newArr[i] = a1Elem;
+                a1Ind++;
+            }
+        }
+        return newArr;
+    }
+
+    public static int[] mergeArrays2(int[] a1, int[] a2) {
+        int[] newArr = new int[a1.length + a2.length];
+        int a1Ind = 0;
+        int a2Ind = 0;
+        int newArrInd = 0;
+        while (a1Ind < a1.length && a2Ind < a2.length) {
+            if (a1[a1Ind] < a2[a2Ind]) {
+                newArr[newArrInd++] = a1[a1Ind++];
+            } else {
+                newArr[newArrInd++] = a2[a2Ind++];
+            }
+        }
+
+        while (a1Ind < a1.length) {
+            newArr[newArrInd++] = a1[a1Ind++];
+        }
+        while (a2Ind < a2.length) {
+            newArr[newArrInd++] = a2[a2Ind++];
         }
 
         return newArr;
@@ -130,13 +152,20 @@ public class TwoFromFour {
 
     private String printTextPerRole(String[] roles, String[] textLines) {
         StringBuilder sb = new StringBuilder();
+
         for (String role : roles) {
-            sb.append(role).append(":\n");
+            sb.append(role)
+                    .append(":\n");
+
             for (int j = 0; j < textLines.length; j++) {
                 if (textLines[j].startsWith(role + ":")) {
-                    sb.append((j + 1)).append(") ").append(textLines[j].substring(role.length() + 2)).append('\n');
+                    sb.append((j + 1))
+                            .append(")")
+                            .append(textLines[j].substring(role.length() + 1))
+                            .append('\n');
                 }
             }
+
             sb.append('\n');
         }
 
