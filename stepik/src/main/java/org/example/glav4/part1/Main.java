@@ -6,7 +6,7 @@ public class Main {
         if (x < 0.0) {
             throw new IllegalArgumentException("Expected non-negative number, got " + x);
         }
-        
+
         return Math.sqrt(x);
     }
 

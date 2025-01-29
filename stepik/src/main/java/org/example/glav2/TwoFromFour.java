@@ -159,9 +159,11 @@ public class TwoFromFour {
 
             for (int j = 0; j < textLines.length; j++) {
                 if (textLines[j].startsWith(role + ":")) {
-                    sb.append((j + 1))
+                    sb.append(j + 1)
                             .append(")")
-                            .append(textLines[j].substring(role.length() + 1))
+                            .append(
+                                    textLines[j].substring(role.length() + 1)
+                            )
                             .append('\n');
                 }
             }
