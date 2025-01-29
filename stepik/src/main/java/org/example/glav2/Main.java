@@ -1,5 +1,7 @@
 package org.example.glav2;
 
+import java.nio.charset.Charset;
+
 public class Main {
     public static void main(String[] args) {
 
@@ -15,5 +17,6 @@ public class Main {
         long l = 23453456l;
         float f = l;
         System.out.println();
+        System.out.println(Charset.defaultCharset());
     }
 }
