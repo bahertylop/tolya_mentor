@@ -4,17 +4,7 @@ import java.awt.*;
 
 public class NegativeTextAnalyzer extends KeywordAnalyzer {
 
-    private final String[] keywords = {":(", "=(", ":|"};
-
-    @Override
-    public Label processText(String text) {
-        for (String word : getKeywords()) {
-            if (text.contains(word)) {
-                return getLabel();
-            }
-        }
-        return Label.OK;
-    }
+    private final String[] keywords = new String[]{":(", "=(", ":|"};
 
     @Override
     protected String[] getKeywords() {
