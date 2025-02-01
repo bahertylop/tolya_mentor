@@ -2,6 +2,8 @@ package org.example.glav3.text_analoizer;
 
 public abstract class KeywordAnalyzer implements TextAnalyzer {
 
+    protected String[] arms;
+
     protected abstract String[] getKeywords();
 
     protected abstract Label getLabel();

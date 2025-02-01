@@ -1,6 +1,10 @@
 package org.example.glav3.robot;
 
-import java.util.Base64;
+
+import jdk.dynalink.Operation;
+
+import java.util.function.Function;
+import java.util.function.ToIntFunction;
 
 public class Main {
 
@@ -11,17 +15,21 @@ public class Main {
         Direction directionX = (toX - x > 0) ? Direction.RIGHT : Direction.LEFT;
         Direction directionY = (toY - y > 0) ? Direction.UP : Direction.DOWN;
 
-        while (directionX != robot.getDirection()) {
-            robot.turnLeft();
-        }
-        while (robot.getX() != toX) {
-            robot.stepForward();
-        }
+        turnRobot(robot, directionX);
+        cycleRobotStep(robot, Math.abs(toX - x));
 
-        while (directionY != robot.getDirection()) {
+        turnRobot(robot, directionY);
+        cycleRobotStep(robot, Math.abs(toY - y));
+    }
+
+    public static void turnRobot(Robot robot, Direction neededDirection) {
+        while (neededDirection != robot.getDirection()) {
             robot.turnLeft();
         }
-        while (robot.getY() != toY) {
+    }
+
+    public static void cycleRobotStep(Robot robot, int countSteps) {
+        while (countSteps-- != 0) {
             robot.stepForward();
         }
     }
