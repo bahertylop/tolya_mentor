@@ -57,6 +57,8 @@ public class Lyamdas {
 
 
 
+
+
         MyClass myClass = new MyClass("") {
             @Override
             public void method1() {
@@ -71,7 +73,6 @@ public class Lyamdas {
 }
 
 interface Lyamda {
-
     void print1(String str);
 
     default void print2(String str) {

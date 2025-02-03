@@ -1,4 +1,143 @@
-Модуль 5 - работа с файлами и файловой системой
+Модуль 5.1 - работа с файлами и файловой системой
 
-java.io - пакет для работы с файлами\вводом и выводом
-File - класс для файлов и директорий
+java.io - пакет для работы с файлами\вводом и выводом (старый)
+
+File - класс для работы с файлами и директориями
+в конструкторе задается путь понятный текущей ОС
+
+pathSeparator       |
+pathSeparatorChar   | => пользоваться сепараторами для формулирования путей к файлам в коде
+
+абсолютный путь - путь с корня файловой системы
+относительный - путь относительно базовой дирректории
+
+getPath - путь
+getName - имя файла или дирректории
+getParent - путь без имени
+getParentFile - вернет родительскую дирректорию в виде File
+getCanonicalPath - возвращает путь без всякой залупы (выкидывает исключения)
+
+exists() - проверка существует ли
+isFile() - проверка что файл
+isDirectory() - проверка что папка
+
+// если файл:
+length() - размер файла
+lastModified() - время последней модификации (милисекунды 1970)
+
+// если директория:
+list() - String[] названий файлов и папок в директории
+listFiles() - File[] - содержимое в формате File[]
+
+file.createNewFile() - метод для создания нового файла
+
+file.mkdir() - создание директории
+file.mkdirs() - coздание директории с возможностью вложенных директорий
+
+file.delete() - удаление файла или директории (директория удаляется только пустая)
+file.renameTo(File targetFile) - переименовать файл
+
+
+java.nio.file.Path - новый пакет для работы с файлами (Java 7) - добавлен т.к. прошлый пакет плохо спроектирован
+методы выкидывают исключения, больше методов
+
+Path - аналог File
+Paths.get("");
+path.toFile();
+file.toPath()
+все те же методы в наличии
+можно доставать названия промежуточных папок в пути по индексу
+startsWith
+относительные пути
+
+класс Files для доступа к файловой системе
+DirectoryStream<> - Класс для прочтения содержимого   директории
+
+Files.createDirectory(path)
+Files.createDirectories(path)
+
+Files.walkFileTree(path, new SimpleFileVisitors<Path>() { ... }); - обход директории
+
+
+
+Модуль 5.2 - потоки байт
+
+эти потоки слишком низкоуровневые и поэтому неудобны
+абстрактные классы
+java.io.InputStream - ввод данных
+java.io.OutputStream - вывод данных
+
+инпутСтрим:
+    read() - читает байт из  потока и сдвигается дальше
+    read(byte b[])                       - возвращает количество
+    read(byte b[], int off, int len)     - возвращает количество
+    long skip(long n)                    - возвращает количество пропущенных
+
+аутпутСтрим:
+    write(int b)                         - выводит 1 байт
+    write(byte b[])                      - выводит массив
+    write(byte b[], int off, int len)    - выводит указанное количество, начиная с индекса
+    flush()                              - сбрасывает буфера
+
+close() - закрытие ресурсов, с вызовом flush
+
+Работа с потоками байт из файлов:
+    FileInputStream,
+    FileOutputStream
+принимают File или путь строкой, также Files.newInputStream(Paths.get("путь"))
+
+ByteArrayInputStream
+ByteArrayOutputStream
+
+
+DataOutputStream - класс, который оборачивает OutputStream, чтобы было удобно работать, предоставляет более удобный интерфейс
+    принимает OutputStream в конструкторе
+    write(int v)
+    writeUTF(String str)
+
+DataInputStream - класс, который оборачивает работу с InputStream
+    readInt()
+
+
+DeflaterOutputStream - сжатие записываемых данных налету с помощью алгоритма deflate
+DeflaterInputStream - распаковка данных налету
+
+
+
+5.3 Потоки символов
+
+абстрактные классы
+    java.io.Reader - ввод - аналогичен InputStream
+    java.io.Writer - вывод - аналогичен OutputStream
+
+InputStreamReader |
+InputStreamWriter | => указывается поток и кодировка
+
+Charset и StandardCharset
+
+FileReader и FileWriter - нельзя указать кодировку
+
+new InputStreamReader(new FileInputStream("in.txt"), StandardCharsets.UTF_8);
+// аналогично с writer
+
+PrintWriter - оборачивает Writer, класс для форматированного вывода, также имеет printf
+не выбрасывают исключения, устанавливают флаг ошибки, проверка - checkError()
+
+PrintStream - оборачивает OutputStream
+
+
+java.io.StreamTokenizer - разбирает строку на числа и слова, неудобный
+java.util.StringTokenizer - читает из строки, не распознает числа, неудобный
+java.util.Scanner - работает со всеми примитивами и строками, можно указать шаблон разделителя на токены, useLocale для настроек форматирования
+
+System.in - InputStream
+System.out - PrintStream
+System.err - PrintStream
+
+
+
+5.4 Продвинутые возможности
+
+ProcessBuilder - класс для создания новых процессов
+
+ByteBuffer

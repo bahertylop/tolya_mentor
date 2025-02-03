@@ -48,16 +48,16 @@ public class AsciiCharSequence implements CharSequence {
             throw new IndexOutOfBoundsException();
         }
         byte[] newByteArray = new byte[length() - (to - from)];
-//        System.arraycopy(byteArray, 0, newByteArray, 0, from);
-//        System.arraycopy(byteArray, to, newByteArray, from, length() - to);
+        System.arraycopy(byteArray, 0, newByteArray, 0, from);
+        System.arraycopy(byteArray, to, newByteArray, from, length() - to);
 
 
-        for (int i = 0; i < from; i++) {
-            newByteArray[i] = byteArray[i];
-        }
-        for (int i = from; i < newByteArray.length; i++) {
-            newByteArray[i] = byteArray[to + (i - from)];
-        }
+//        for (int i = 0; i < from; i++) {
+//            newByteArray[i] = byteArray[i];
+//        }
+//        for (int i = from; i < newByteArray.length; i++) {
+//            newByteArray[i] = byteArray[to + (i - from)];
+//        }
         return new AsciiCharSequence(newByteArray);
     }
 

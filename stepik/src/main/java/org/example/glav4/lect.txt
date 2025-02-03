@@ -61,8 +61,6 @@ message - строка, переданная в конструкторе
 
 
 
-
-
 Логирование
 
 логеры выстраиваются в цепочку он самых глубоких к тому, что лежит в корне репы
@@ -79,9 +77,11 @@ FINEST      |
 
 Handler абстрактный класс, определяющий перехват логов
 
-ConsoleHandler - выводит в консоль
-FileHandler - выводит в файл
-SocketHandler - отправляет по сети
+StreamHandler пишет в OutputStream.
+ConsoleHandler пишет в System.err.
+FileHandler пишет в файл.
+SocketHandler отправляет по сети на указанный порт.
+MemoryHandler просто сохраняет в ОЗУ.
 
 либо задается в конфигах, либо в коде addHandler(...)
 
@@ -91,3 +91,6 @@ SocketHandler - отправляет по сети
 
     SimpleFormatter - в человекочитаемом виде
     XMLFormatter - в виде xml
+
+запуск с указанием настройки логирования
+java -Djava.util.logging.config.file=logging.properties -jar myapp.jar

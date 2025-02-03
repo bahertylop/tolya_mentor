@@ -14,7 +14,7 @@ public class TooMuchKeyWordsAnalyzer extends KeywordAnalyzer {
     @Override
     public Label processText(String text) {
         for (String keyword : keywords) {
-            if (text.length() - text.replace(String.valueOf(keyword), "").length() > maxCount * keyword.length()) {
+            if (text.length() - text.replace(keyword, "").length() > maxCount * keyword.length()) {
                 return Label.TOO_MUCH_KEYWORDS;
             }
         }
