@@ -23,17 +23,14 @@ public class Test {
         System.out.println(getCallerClassAndMethodName());
     }
     public static String getCallerClassAndMethodName() {
-        try {
-            throw new RuntimeException();
-        } catch (RuntimeException e) {
-            StackTraceElement[] stackTraceElements = e.getStackTrace();
-            System.out.println(Arrays.toString(stackTraceElements));
-            if (stackTraceElements.length == 2) {
-                return null;
-            }
+        StackTraceElement[] stackTraceElements = new RuntimeException().getStackTrace();
 
-            StackTraceElement elemPred = stackTraceElements[2];
-            return elemPred.getClassName() + "#" + elemPred.getMethodName();
+        if (stackTraceElements.length == 2) {
+            return null;
         }
+
+        StackTraceElement elemPred = stackTraceElements[2];
+        return elemPred.getClassName() + "#" + elemPred.getMethodName();
+
     }
 }

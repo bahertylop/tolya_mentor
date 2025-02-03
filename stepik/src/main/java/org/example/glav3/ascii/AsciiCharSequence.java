@@ -47,18 +47,24 @@ public class AsciiCharSequence implements CharSequence {
         if (to < from || to < 0 || from < 0 || from > length() || to > length()) {
             throw new IndexOutOfBoundsException();
         }
-        byte[] newByteArray = new byte[length() - (to - from)];
-        System.arraycopy(byteArray, 0, newByteArray, 0, from);
-        System.arraycopy(byteArray, to, newByteArray, from, length() - to);
 
+        CharSequence part1 = subSequence(0, from);
+        CharSequence part2 = subSequence(to, length());
 
-//        for (int i = 0; i < from; i++) {
-//            newByteArray[i] = byteArray[i];
-//        }
-//        for (int i = from; i < newByteArray.length; i++) {
-//            newByteArray[i] = byteArray[to + (i - from)];
-//        }
-        return new AsciiCharSequence(newByteArray);
+        return mergeCharSequences(part1, part2);
+    }
+
+    private CharSequence mergeCharSequences(CharSequence part1, CharSequence part2) {
+        byte[] bytes = new byte[part1.length() + part2.length()];
+        copyBytesFromCharSequence(part1, bytes, 0);
+        copyBytesFromCharSequence(part2, bytes, part1.length());
+        return new AsciiCharSequence(bytes);
+    }
+
+    private void copyBytesFromCharSequence(CharSequence charSequence, byte[] bytes, int start) {
+        for (int i = 0; i < charSequence.length(); i++) {
+            bytes[i + start] = (byte) charSequence.charAt(i);
+        }
     }
 
     @Override
@@ -79,7 +85,7 @@ public class AsciiCharSequence implements CharSequence {
         // тест delete(int from, int to)
         byte[] bytes = "ILoveDogs".getBytes();
         sequence = new AsciiCharSequence(bytes);
-        System.out.println(sequence.delete(1, 5));
+        System.out.println(sequence.delete(1, 7));
 //        System.out.println(sequence.subSequence(1, 4));
     }
 }

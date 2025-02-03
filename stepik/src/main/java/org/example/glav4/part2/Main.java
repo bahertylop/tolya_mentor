@@ -11,15 +11,13 @@ public class Main {
     }
 
     public static void moveRobot(RobotConnectionManager robotConnectionManager, int toX, int toY) {
-
+        int maxAttempts = 3;
         for (int i = 0; i < 3; i++) {
             try (RobotConnection robotConnection = robotConnectionManager.getConnection()) {
                 robotConnection.moveRobotTo(toX, toY);
-                return;
+                i = maxAttempts;
             } catch (RobotConnectionException e) {
-                if (i == 2 && !e.getStackTrace()[0].getMethodName().equals("close")) {
-                    System.out.println(Arrays.toString(e.getStackTrace()));
-                    System.out.println(e.getStackTrace()[0].getMethodName());
+                if (i == maxAttempts - 1) {
                     throw e;
                 }
             }
@@ -27,13 +25,15 @@ public class Main {
     }
 
     public static void moveRobot2(RobotConnectionManager robotConnectionManager, int toX, int toY) {
-        for (int i = 0; i < 3; i++) {
+        int tries = 3;
+        for (int i = 0; i < tries; i++) {
             RobotConnection robotConnection = null;
             try {
                 robotConnection = robotConnectionManager.getConnection();
                 robotConnection.moveRobotTo(toX, toY);
                 return;
             } catch (RobotConnectionException e) {
+                // на третий раз исключение пробрасывается
                 if (i == 2) {
                     throw e;
                 }
