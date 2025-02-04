@@ -21,6 +21,8 @@ public class Task2 {
                 sc.next();
             }
         }
+
+        sc.close();
         return sum;
     }
 }

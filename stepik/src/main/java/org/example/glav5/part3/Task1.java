@@ -17,12 +17,14 @@ public class Task1 {
     }
 
     public static String readAsString(InputStream inputStream, Charset charset) throws IOException {
-        InputStreamReader reader = new InputStreamReader(inputStream, charset);
-
         StringBuilder sb = new StringBuilder();
-        int readSymb;
-        while ((readSymb = reader.read()) != -1) {
-            sb.append((char) readSymb);
+        try (
+                InputStreamReader reader = new InputStreamReader(inputStream, charset);
+        ) {
+            int readSymb;
+            while ((readSymb = reader.read()) != -1) {
+                sb.append((char) readSymb);
+            }
         }
 
         return sb.toString();

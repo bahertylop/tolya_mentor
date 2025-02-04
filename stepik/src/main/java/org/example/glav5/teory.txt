@@ -16,6 +16,7 @@ getName - имя файла или дирректории
 getParent - путь без имени
 getParentFile - вернет родительскую дирректорию в виде File
 getCanonicalPath - возвращает путь без всякой залупы (выкидывает исключения)
+getCanonicalFile - может IOException
 
 exists() - проверка существует ли
 isFile() - проверка что файл
@@ -51,7 +52,8 @@ startsWith
 относительные пути
 
 класс Files для доступа к файловой системе
-DirectoryStream<> - Класс для прочтения содержимого   директории
+те же методы + copy move
+DirectoryStream<> - Класс для прочтения содержимого   директории  лучше чем list, т.к. работает нормально с большими директориями
 
 Files.createDirectory(path)
 Files.createDirectories(path)
@@ -140,4 +142,15 @@ System.err - PrintStream
 
 ProcessBuilder - класс для создания новых процессов
 
-ByteBuffer
+более низкоуровневые классы для ввода и вывода
+FileChannels
+ReadableByteChannel
+WriteableByteChannel
+ByteBuffer - неблокирующий ввод и вывод
+
+
+Сериализация:
+Serializable - маркерный интерфейс
+transient пометить поле необязательным
+ObjectInputStream readObject
+ObjectOutputStream writeObject

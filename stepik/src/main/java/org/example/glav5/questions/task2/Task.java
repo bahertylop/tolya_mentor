@@ -31,8 +31,10 @@ public class Task {
 
     public static void filterUsers(String inputFileUrl, String outputFileUrl, double maxUsingValue) {
         File inputFile = new File(inputFileUrl);
-        try (Scanner sc = new Scanner(new FileInputStream(inputFile));
-                BufferedWriter bw = new BufferedWriter(new FileWriter(outputFileUrl))) {
+        try (
+            Scanner sc = new Scanner(new FileInputStream(inputFile));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(outputFileUrl))
+        ) {
             int lineCounter = 0;
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
@@ -54,7 +56,8 @@ public class Task {
     }
 
     private static boolean checkUser(String[] splitLine, double maxUsing) {
-        for (int i = 2; i < splitLine.length; i++) {
+        int startColumn = 2;
+        for (int i = startColumn; i < splitLine.length; i++) {
             try {
                 if (Double.compare(Double.parseDouble(splitLine[i]), maxUsing) > 0) {
                     return false;

@@ -8,25 +8,24 @@ public class Task2 {
     private static final int LINE_FEED = '\n'; // 10
 
     public static void main(String[] args) throws IOException {
-        InputStream inputStream = System.in;
-        OutputStream outputStream = System.out;
+        try (
+            InputStream inputStream = System.in;
+            OutputStream outputStream = System.out;
+        ) {
+            int lastByte = -1;
+            int currentByte;
 
-        int lastByte = -1;
-        int currentByte;
+            while ((currentByte = inputStream.read()) != -1) {
+                if (!(lastByte == CARRIAGE_RETURN && currentByte == LINE_FEED) && lastByte != -1) {
+                    outputStream.write(lastByte);
+                }
+                lastByte = currentByte;
+            }
 
-        while ((currentByte = inputStream.read()) != -1) {
-            if (!(lastByte == CARRIAGE_RETURN && currentByte == LINE_FEED) && lastByte != -1) {
+            if (lastByte != -1) {
                 outputStream.write(lastByte);
             }
-            lastByte = currentByte;
         }
-
-        if (lastByte != -1) {
-            outputStream.write(lastByte);
-        }
-
-        inputStream.close();
-        outputStream.close();
     }
 }
 
