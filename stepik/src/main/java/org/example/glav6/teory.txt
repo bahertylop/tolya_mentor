@@ -1,0 +1,252 @@
+6.0 Generics, Collections, Streams, Functional Interfaces
+
+
+6.1. Generics - обобщенные типы
+параметризация возможна только ссылочным типом
+Class<T>, также можно указать ограничение на тип T extends ... (... имя класса или интерфейса, можно несколько)
+
+например Optional<T>
+не имеет публичного конструктора
+
+один Optional<> нельзя закастить к другому
+
+также ограничивать можно с помощью super
+
+? заменяется на Object
+
+
+6.2. Коллекции
+
+Коллекции - разнообразные контейнеры однотипных элементов
+
+минусы массивов:
+    у массивов фиксированный при создании размер
+    нет защиты на изменение
+
+все коллекции работают с ссылочными типами
+
+основные классы коллекций:
+java.util - для однопоточных
+java.util.concurrent - для многопоточки
+
+java.util.Collection - базовый интерфейс коллекций
+    int size()
+    boolean isEmpty()
+    boolean contains(Object o)
+    boolean add(E e)
+    boolean remove(Object o)
+    void clear()
+
+    iterator() - возвращает Iterator<E>,
+    метод унаследован от интерфейса Iterable<E>
+    итератор нужен для однообразного обхода любой коллекции
+
+Методы java.util.Iterator<E>
+    boolean hasNext()
+    E next()
+    default void remove()  - удаляет последний возвращенный итератором элемент
+    forEachRemaining(Consumer<? super E> action) - метод для обхода с действием
+
+Методы java.util.Iterable:
+    void forEach(Consumer<? super T> action) - проход по коллекции
+
+не менять коллекции при проходе без итератора, ConcurrentModificationException (то есть не изменять длину, удалять или добавлять элементы)
+
+
+List - список, набор элементов одного типа с возможностью доступа по индексу
+нефиксированная длина
+    E get(int ind)
+    E set(int index, E elem)
+    void add(int index, E Elem)
+    void add(E elem)
+    E remove(int index)
+    int indexOf(Object o)
+    int lastIndexOf(Object o)
+    List<E> subList(int fromIndex, int toIndex)  - изменение одного списка будут видны в другом (не копирование) (для работы с частями списка по сути удобен)
+    equals сравнивает поэлементно
+
+Реализации List:
+    ArrayList - реализация поверх массива
+        быстрый доступ по индексу
+        добавление за константу или может пересобрать массив с большей длиной, тогда линейная
+        удаление - перезапись всех элементов справа
+
+    LinkedList - реализация с помощью Node (двусвязный список)
+        быстро добавлять и удалять элементы
+        долго получать элементы
+
+
+Queue - очередь, коллекция, обеспечивающая порядок FIFO - первый вошел, первый вышел
+    boolean add(E e);
+    boolean offer(E e);
+    E remove();   |                                         remove -> throw NoSuchElementException  |
+    E poll();     | => извлекают первый элемент из головы   poll -> return null                     | => если нечего извлечь
+    E element();  |
+    E peek();     | => посмотреть элемент без удаления      throw или null аналогично
+    реализация: PriorityQueue
+Deque - интерфейс, наследующий Queue, добавляет дополнительные методы (работает и с хвостом и с головой)
+    методы те же, только для головы и для хвоста отдельные
+    реализации 2:
+        ArrayDeque
+        LinkedList
+
+
+Set - множество уникальных элементов
+    возвращает false при добавлении дубликата с помощью add
+    уточняет методы Collection
+    реализации:
+        HashSet - реализация множества на основе hash-таблицы
+            hashCode - для определения ячейки hash-таблицы для хранения элемента
+            equals - для сравнения с элементами, лежащими в данной ячейке
+        LinkedHashSet - хранит порядок элементов с помощью LinkedHashMap, инициализируется в HashSet
+        TreeSet - реализация интефейса SortedSet внутри - красно-черное дерево, элементы должны реализовывать java.lang.Comparable, либо передавать Comparator этих типов в конструктор сета
+
+
+Map - интерфейс, предоставляющий ассоциативный массив, не наследует Collection, индексирует элементы объектами в качестве ключей
+    дубликаты ключей не допускаются
+    int size()
+    boolean isEmpty()
+
+    boolean containsKey(Object key)
+    boolean containsValue(Object value)
+
+    V get(Object key)
+    V put(K key, V value)
+
+    V remove(Object key)
+    void clear()
+
+    Set<K> keySet()
+    Collection<V> values()
+    Set<Map.entry<K, V>> entrySet()
+
+Реализации:
+    HashMap
+    LinkedHashMap
+    TreeMap
+
+
+Collections - утилитный класс, работающий с коллекциями
+    sort list
+    reverse list
+    binarySearch list
+    swap list i j
+    fill list object - заменяет все элементы на object
+    и другие класс на 6 тысяч строк
+
+    unmodifiable методы, чтобы нельзя было поменять содержимое коллекции
+
+Еще коллекции:
+    Vector
+    Stack
+    Dictionary
+    HashTable
+
+
+
+6.3. Функциональные интерфейсы
+
+интрефейс функциональный если в нем ровно один абстрактный метод
+могут быть дефолтные методы и статические поля (константы)
+
+появились в java 8
+
+аннотация @FunctionalInterface - проверка на соответствие определению
+стандартные функциональные интерфейсы лежат в java.util.function
+
+Consumer<T> -> void accept(T t);
+IntConsumer     |
+DoubleConsumer  | => интерфейсы для примитивов
+LongConsumer    |
+BiConsumer<T, U> -> void accept(T t, U u);
+можно вызвать последовательно с помощью andThen(Consumer<>)
+
+Supplier<T> -> T get();
+BooleanSupplier
+IntSupplier
+LongSupplier
+DoubleSupplier
+
+Predicate<T> -> boolean test(T t);
+IntPredicate
+LongPredicate
+DoublePredicate
+BiPredicate<T, U>
+с помощью метода negate() можно получить обратный предикат
+несколько предикатов можно соединить с помощью and() or() not() isEqual()
+
+Function<T, R> -> R apply(T t);
+BiFunction<T, U, R> -> R apply(T t, U u);
+DoubleFunction  double -> T
+LongToIntFunction  long -> int
+ToIntFunction  T -> int
+
+UnaryOperator<T> = T -> T
+BinaryOperator<T, U> = (Object, Object) -> Object
+Int
+Long
+Double
+andThen(Func) и compose(Func)
+
+Для собственных функциональных интерфейсов:
+    1. можно написать целый класс
+    2. лямбда-выражения
+        можно пользоваться полями внутри лямбды                                     |
+        можно пользоваться полями и методами класса в котором объявлена лямбда      | => переменные должны быть финальными
+        можно пользоваться локальными полями метода в котором объявлена лямбда      |
+        нельзя присваивать новые значения переменным вне лямбды
+    3. ссылка на метод или конструктор
+
+Comparator - интерфейс для сравнений
+
+
+
+6.4. Stream API
+Stream - последовательность элементов, потенциальная бесконечная с возможностью проводить над ней различные преобразования
+java.util.stream
+
+Stream<T> - имеет огромное количество методов
+IntStream
+LongStream
+DoubleStream
+
+Применение трансформаций к элементам стрима не изменяет содержимое источника, откуда стрим берет элементы (например, коллекции или массива).
+
+Получение стрима:
+    1. Из любой коллекции методом .stream()
+    2. Из BufferedReader методом .lines() - поток строк, нужно закрывать
+    3. Stream<Path>  с помощью Files.list(path) (список в данной директории) и Files.walk(path) (список с обходом вложенных директорий) нужно закрывать
+    4. IntStream chars = "hello".chars()
+    5. Динамическая генерация DoubleStream rn = DoubleStream.generate(Math::Random) (с помощью generate(Supplier))
+        iterate(0, n -> n + 1)
+        range(0, 100)           не включает 100
+        rangeClosed(0, 100)     включает 100
+    6. Конкатенация двух стримов, Stream.concat(stream1, stream2)
+    7. Stream.empty()
+    8. Arrays.stream(array) - получение стрима из массива
+    9. явное перечисление всех элементов стрима IntStream.of(1,2,3,4,5,6)
+
+
+Промежуточные операции:
+    .filter(предикат)
+    .mapToObj(функция)
+    .flatMapToInt()  для каждого объекта получаем стрим и конкатенируем в один поток
+    .distinct()  удаление дубликатов
+    .sorted()  сортирует по возрастанию, можно передать компаратор
+    .skip(int x)  пропускает x элементов
+    .limit(int x)  ограничивает количество элементов
+    .peek(Consumer)  дает посмотреть что в стриме на данном участке обитает
+
+Терминальные операции: (финальная работа со стримом, то, чем заканчивается обработка потока)
+    .forEach(Consumer)  проходится консюмером по всем оставшимся элементам потока
+    .findFirst()  первый по порядку элемент стрима
+    .findAny()  вернет какой-то элемент стрима
+    .allMatch(предикат)  проверяет что все элементы соответствуют предикату
+    .anyMatch(предикат)  хотябы один соответствует
+    .noneMatch(предикат)  ни один не соответствует
+    .min(компаратор\_)  минимальный элемент
+    .max(компаратор\_)  максимальный элемент
+    .count()  количество элементов, оставшееся в стриме
+    .sum()  суммирует элементы стрима
+    .collect(Collector)  группирует элементы стрима с новую структуру
+    .reduce(бинарный оператор)  применяет попарно бинарный оператор, пока не останется один элемент
