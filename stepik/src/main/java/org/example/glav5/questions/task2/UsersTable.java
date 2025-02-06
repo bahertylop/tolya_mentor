@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class UsersTable {
 
-    private static final String COLUMN_NAMES = "id|name|waterCountDay|waterCountNight|gasCount|electroCountDay|electroCountNight";
+    private static final String COLUMN_NAMES = "id|name|waterCountDay|waterCountNight|gasCount|electroCountDay|electroCountNight\n";
 
     public static List<User> getUsersFromFile(String fileName) {
         List<User> users = new ArrayList<>();
@@ -50,7 +50,7 @@ public class UsersTable {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(newFileName))
         ) {
             bufferedWriter.write(COLUMN_NAMES);
-
+            
             for (User user : users) {
                 bufferedWriter.write(user.toLine());
                 bufferedWriter.newLine();
