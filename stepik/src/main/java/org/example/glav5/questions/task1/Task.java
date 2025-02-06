@@ -1,10 +1,9 @@
 package org.example.glav5.questions.task1;
 
 import java.io.*;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.EnumSet;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
@@ -28,17 +27,22 @@ public class Task {
 
     public static void bypassDirectory(String directoryName) {
         Path path = Paths.get(directoryName);
-        String newFileName = path + File.separator + TASK_FILE_NAME;
-        try (
-            DirectoryStream<Path> pathStream = Files.newDirectoryStream(path);
-            FileWriter fw = new FileWriter(newFileName, false);
-        ) {
-            pathStream.forEach(folderOrFile -> {
-                if (Files.isDirectory(folderOrFile)) {
-                    bypassDirectory(folderOrFile.toString());
-                }
-            });
-            fw.write(TASK_TEXT);
+
+        try {
+            Files.walkFileTree(path, EnumSet.of(FileVisitOption.FOLLOW_LINKS), Integer.MAX_VALUE,
+                    new SimpleFileVisitor<Path>() {
+                        @Override
+                        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
+                                throws IOException {
+                            Path newFilePath = dir.resolve(TASK_FILE_NAME);
+                            try (FileWriter fw = new FileWriter(newFilePath.toFile(), false)) {
+                                fw.write(TASK_TEXT);
+                            }
+
+                            return FileVisitResult.CONTINUE;
+                        }
+                    }
+            );
         } catch (IOException e) {
             System.out.println("Ошибка при работе с файлами: " + e.getMessage());
         }

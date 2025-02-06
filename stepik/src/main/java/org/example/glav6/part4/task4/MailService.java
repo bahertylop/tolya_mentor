@@ -15,9 +15,7 @@ public class MailService<T> implements Consumer<MailServiceUnit<T>> {
 
     @Override
     public void accept(MailServiceUnit<T> unit) {
-        List<T> value = map.getOrDefault(unit.getTo(), new ArrayList<>());
-        value.add(unit.getContent());
-        map.put(unit.getTo(), value);
+        map.computeIfAbsent(unit.getTo(), x -> new ArrayList<>()).add(unit.getContent());
     }
 
     public Map<String, List<T>> getMailBox() {
