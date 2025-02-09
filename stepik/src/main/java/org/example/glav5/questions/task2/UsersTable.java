@@ -50,7 +50,7 @@ public class UsersTable {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(newFileName))
         ) {
             bufferedWriter.write(COLUMN_NAMES);
-            
+
             for (User user : users) {
                 bufferedWriter.write(user.toLine());
                 bufferedWriter.newLine();

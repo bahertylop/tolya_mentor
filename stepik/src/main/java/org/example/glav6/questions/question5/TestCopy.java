@@ -13,7 +13,7 @@ public class TestCopy {
         Product product = createTestProduct();
 
         Product productCopy = switch (copyMethod) {
-            case SERIALIZTION -> product.copyBySerialize();
+            case SERIALIZATION -> product.copyBySerialize();
             case CLONE -> product.clone();
             case CONSTRUCTOR -> new Product(product);
         };
@@ -47,7 +47,7 @@ public class TestCopy {
 
     private enum CopyMethod {
         CLONE("метод clone()"),
-        SERIALIZTION("сериализацию"),
+        SERIALIZATION("сериализацию"),
         CONSTRUCTOR("конструктор копирования");
 
         final String description;
