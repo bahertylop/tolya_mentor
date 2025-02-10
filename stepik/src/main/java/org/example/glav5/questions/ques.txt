@@ -5,3 +5,17 @@ cause	        Причина исключения (другое исключен
 stackTrace	    Массив стек-трейса (показывает, где возникла ошибка)
 
 представление в виде потока байтов
+
+try (Stream<Path> paths = Files.walk(path, FileVisitOption.FOLLOW_LINKS)) {
+            paths.filter(Files::isDirectory)
+                    .forEach(dir -> {
+                        Path newFilePath = dir.resolve(TASK_FILE_NAME);
+                        try (FileWriter fw = new FileWriter(newFilePath.toFile(), false)) {
+                            fw.write(TASK_TEXT);
+                        } catch (IOException e) {
+                            System.out.println("Ошибка при записи в файл: " + e.getMessage());
+                        }
+                    });
+        } catch (IOException e) {
+            System.out.println("Ошибка при работе с файлами: " + e.getMessage());
+        }

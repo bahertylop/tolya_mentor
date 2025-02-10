@@ -1,5 +1,9 @@
 package org.example.glav6.questions.question5;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class TestCopy {
 
     public static void main(String[] args) throws CloneNotSupportedException {

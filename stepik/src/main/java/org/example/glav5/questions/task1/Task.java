@@ -29,8 +29,7 @@ public class Task {
         Path path = Paths.get(directoryName);
 
         try {
-            Files.walkFileTree(path, EnumSet.of(FileVisitOption.FOLLOW_LINKS), Integer.MAX_VALUE,
-                    new SimpleFileVisitor<Path>() {
+            Files.walkFileTree(path, new SimpleFileVisitor<>() {
                         @Override
                         public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
                                 throws IOException {
