@@ -1,0 +1,28 @@
+1. можно ли verify сделать без package?
+verify - запустит validate, compile, test, package
+
+2. verify
+verify - это не плагин, а фаза жизненного цикла maven-а.
+Поэтому описание такое краткое. Сама по себе фаза ничего не делает.
+Но на нее могут назначаться плагины, попадающие под это описание:
+"выполнение любых проверок для верификации пакета на валидность и соответствие критериям качества".
+
+maven-failsafe-plugin -  плагин для интеграционных тестов, привязывается к verify
+
+verify: Выполняются дополнительные проверки, обычно интеграционные тесты или тесты, указанные плагинами.
+
+3. куда деплоить деплоем?
+на удаленные репозитории, хранящие артефакты
+
+4. структура http запроса:
+GET /index.html HTTP/1.1
+Host: www.ru
+Connection: keep-alive
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Accept-Encoding: gzip, deflate
+Accept-Language: ru,en;q=0.9,en-GB;q=0.8,en-US;q=0.7
+
+// тело запроса

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>stepic2</artifactId>
+    <artifactId>module1</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
