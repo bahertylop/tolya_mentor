@@ -18,7 +18,11 @@ public class AccountService {
             return HttpStatus.Code.BAD_REQUEST;
         }
 
-        boolean saved = userRepository.saveUser(new User(userDto.getLogin(), userDto.getPassword()));
+        boolean saved = userRepository.saveUser(
+                User.builder()
+                        .login(userDto.getLogin())
+                        .password(userDto.getPassword())
+                .build());
         if (saved) {
             return HttpStatus.Code.OK;
         }
