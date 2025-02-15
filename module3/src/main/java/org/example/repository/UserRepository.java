@@ -1,28 +1,35 @@
 package org.example.repository;
 
+import lombok.AllArgsConstructor;
 import org.example.model.User;
+import org.hibernate.*;
+import org.hibernate.query.Query;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
+@AllArgsConstructor
 public class UserRepository {
 
-    private static Map<String, User> userMap = new HashMap<>();
+    private final SessionFactory sessionFactory;
 
     public boolean saveUser(User user) {
-        boolean contains = userMap.containsKey(user.getLogin());
-        if (!contains) {
-            userMap.put(user.getLogin(), user);
+        try (Session session = sessionFactory.openSession();) {
+            Transaction transaction = session.beginTransaction();
+            session.persist(user);
+            transaction.commit();
+        } catch (HibernateException e) {
+            return false;
         }
-        return !contains;
+        return true;
     }
 
     public Optional<User> getUser(String login) {
-        User user = userMap.get(login);
-        if (user == null) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<User> query = session.createQuery("from User where login = :login", User.class);
+            query.setParameter("login", login);
+            return Optional.ofNullable(query.getSingleResultOrNull());
+        } catch (Exception e) {
             return Optional.empty();
         }
-        return Optional.of(user);
     }
 }

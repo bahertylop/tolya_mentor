@@ -17,9 +17,11 @@ public class SignUpServlet extends HttpServlet {
 
     private final AccountService accountService;
 
+    private final ServletUtils servletUtils;
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UserDto userDto = ServletUtils.parseRequestBody(req, resp, UserDto.class);
+        UserDto userDto = servletUtils.parseRequestBody(req, resp, UserDto.class);
 
         HttpStatus.Code code = accountService.signUp(userDto);
         resp.setStatus(code.getCode());

@@ -13,7 +13,7 @@ public class ServletUtils {
 
     private static final Gson GSON = new Gson();
 
-    public static <T> T parseRequestBody(HttpServletRequest req, HttpServletResponse resp, Class<T> clazz) throws IOException {
+    public <T> T parseRequestBody(HttpServletRequest req, HttpServletResponse resp, Class<T> clazz) throws IOException {
         String body = req.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
 
         try {
