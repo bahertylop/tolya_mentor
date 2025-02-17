@@ -14,6 +14,9 @@ import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.sql.exec.spi.JdbcSelectExecutor;
+
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args) throws Exception {
