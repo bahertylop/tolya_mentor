@@ -2,7 +2,9 @@ package hiber.service;
 
 import hiber.dao.UserDao;
 import hiber.model.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,10 +12,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImp implements UserService {
 
-    @Autowired
-    private UserDao userDao;
+    private final UserDao userDao;
 
     @Transactional
     @Override
@@ -32,5 +34,4 @@ public class UserServiceImp implements UserService {
     public Optional<User> getUserByCar(String model, Integer series) {
         return userDao.getUserByCar(model, series);
     }
-
 }

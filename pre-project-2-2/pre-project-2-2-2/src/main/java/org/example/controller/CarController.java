@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.example.model.Car;
 import org.example.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +14,10 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/cars")
+@RequiredArgsConstructor
 public class CarController {
 
     private final CarService carService;
-
-    @Autowired
-    public CarController(CarService carService) {
-        this.carService = carService;
-    }
 
     @GetMapping
     public String getCars(@RequestParam(required = false) Integer count,

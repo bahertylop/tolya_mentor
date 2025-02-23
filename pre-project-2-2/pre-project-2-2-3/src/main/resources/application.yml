@@ -22,3 +22,5 @@ app:
 loan:
   minimalincome: 40000
   minimalcarprice: 1000000
+  months-to-compute: 6
+  car-price-part-to-compute: 0.3

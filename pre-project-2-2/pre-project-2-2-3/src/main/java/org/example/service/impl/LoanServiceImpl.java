@@ -18,21 +18,29 @@ import java.util.Optional;
 @Service
 public class LoanServiceImpl implements LoanService {
 
-    private final Integer minIncomeValue;
+    private final int minIncomeValue;
 
-    private final Integer minCarPrice;
+    private final int minCarPrice;
+
+    private final double carPricePartToComputeLoan;
+
+    private final int countMonthsToComputeLoan;
 
     private final IncomeService incomeService;
 
     private final UserService userService;
 
     @Autowired
-    public LoanServiceImpl(@Value("${loan.minimalincome}") Integer minIncomeValue,
-                           @Value("${loan.minimalcarprice}") Integer minCarPrice,
+    public LoanServiceImpl(@Value("${loan.minimalincome}") int minIncomeValue,
+                           @Value("${loan.minimalcarprice}") int minCarPrice,
+                           @Value("${loan.car-price-part-to-compute}") double carPricePartToComputeLoan,
+                           @Value("${loan.months-to-compute}") int countMonthsToComputeLoan,
                            IncomeService incomeService,
                            UserService userService) {
         this.minIncomeValue = minIncomeValue;
         this.minCarPrice =  minCarPrice;
+        this.carPricePartToComputeLoan = carPricePartToComputeLoan;
+        this.countMonthsToComputeLoan = countMonthsToComputeLoan;
         this.incomeService = incomeService;
         this.userService = userService;
     }
@@ -55,7 +63,10 @@ public class LoanServiceImpl implements LoanService {
                 if (userIncome.getIncome() != null) {
                     income = userIncome.getIncome();
                 }
-                return new LoanSum(Math.max(6 * income, (int) (carPrice * 0.3)));
+                return new LoanSum(Math.max(
+                        countMonthsToComputeLoan * income,
+                        (int) (carPrice * carPricePartToComputeLoan)
+                ));
             }
         }
         return new LoanSum(0);
