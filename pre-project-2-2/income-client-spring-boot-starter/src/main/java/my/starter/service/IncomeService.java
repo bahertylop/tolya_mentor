@@ -1,6 +1,6 @@
-package org.example.service;
+package my.starter.service;
 
-import org.example.dto.UserIncome;
+import my.starter.dto.UserIncome;
 
 import java.util.List;
 

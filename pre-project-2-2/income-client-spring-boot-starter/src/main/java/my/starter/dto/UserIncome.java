@@ -1,5 +1,4 @@
-package org.example.dto;
-
+package my.starter.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

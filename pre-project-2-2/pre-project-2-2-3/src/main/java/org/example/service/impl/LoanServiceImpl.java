@@ -1,18 +1,17 @@
 package org.example.service.impl;
 
-import org.example.dto.LoanSum;
-import org.example.dto.UserIncome;
 import org.example.model.Car;
-import org.example.model.User;
-import org.example.service.IncomeService;
-import org.example.service.LoanService;
 import org.example.service.UserService;
-import org.example.service.impl.IncomeApiService;
+import org.example.dto.LoanSum;
+import org.example.model.User;
+import org.example.service.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import my.starter.dto.UserIncome;
+import my.starter.service.IncomeService;
+
 import java.util.Optional;
 
 @Service
@@ -44,7 +43,6 @@ public class LoanServiceImpl implements LoanService {
         this.incomeService = incomeService;
         this.userService = userService;
     }
-
 
     @Override
     public LoanSum computeApplyLoanSum(Long userId) {

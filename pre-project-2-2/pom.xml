@@ -11,6 +11,7 @@
     <modules>
         <module>pre-project-2-2-2</module>
         <module>pre-project-2-2-3</module>
+        <module>income-client-spring-boot-starter</module>
     </modules>
 
     <parent>
