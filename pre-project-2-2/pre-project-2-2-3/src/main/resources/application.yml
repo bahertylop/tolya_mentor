@@ -6,7 +6,7 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
@@ -16,3 +16,9 @@ app:
   car-service:
     max-car-count: 6
     sort-on-fields: id, model, price
+  income-api-service:
+    api-url: https://66055cd12ca9478ea1801f2e.mockapi.io/api/users/income
+
+loan:
+  minimalincome: 40000
+  minimalcarprice: 1000000
