@@ -10,6 +10,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>pre-project-2-2-2</module>
+        <module>pre-project-2-2-3</module>
     </modules>
 
     <parent>
