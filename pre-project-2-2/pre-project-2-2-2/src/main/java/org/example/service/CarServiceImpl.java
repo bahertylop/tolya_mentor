@@ -5,9 +5,10 @@ import org.example.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -17,10 +18,16 @@ public class CarServiceImpl implements CarService {
 
     private final Integer maxCountCars;
 
+    private final List<String> sortOnFields;
+
     @Autowired
-    public CarServiceImpl(CarRepository carRepository, @Value("${maxCar}") Integer maxCountCars) {
+    public CarServiceImpl(CarRepository carRepository,
+                          @Value("${app.car-service.max-car-count}") Integer maxCountCars,
+                          @Value("${app.car-service.sort-on-fields}") List<String> sortOnFields
+    ) {
         this.carRepository = carRepository;
         this.maxCountCars = maxCountCars;
+        this.sortOnFields = sortOnFields;
     }
 
 
@@ -31,14 +38,22 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public List<Car> getCountCars(Integer count) {
-        if (count ==  null) {
-            return getAllCars();
+    public List<Car> getCountCars(Integer count, String sortBy) {
+        if (count == null || count > maxCountCars) {
+            count = maxCountCars;
         }
         if (count <= 0) {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
-        count = Math.min(count, maxCountCars);
-        return carRepository.findLimitedCars(PageRequest.of(0, count));
+
+        if (sortBy != null && !sortOnFields.contains(sortBy)) {
+            throw new IllegalArgumentException("не подходит поле для сортировки");
+        }
+
+        PageRequest page = (sortBy == null) ?
+                PageRequest.of(0, count) :
+                PageRequest.of(0, count, Sort.by(sortBy));
+
+        return carRepository.findLimitedCars(page);
     }
 }

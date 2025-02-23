@@ -3,16 +3,15 @@ package org.example.controller;
 import org.example.model.Car;
 import org.example.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/cars")
 public class CarController {
 
@@ -24,8 +23,15 @@ public class CarController {
     }
 
     @GetMapping
-    public List<Car> getCars(Integer count) {
-        List<Car> cars = carService.getCountCars(count);
-        return cars;
+    public String getCars(@RequestParam(required = false) Integer count,
+                          @RequestParam(required = false) String sortBy,
+                          Model model) {
+            try {
+                List<Car> cars = carService.getCountCars(count, sortBy);
+                model.addAttribute("cars", cars);
+                return "cars";
+            } catch (IllegalArgumentException e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            }
     }
 }

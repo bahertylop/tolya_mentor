@@ -8,5 +8,5 @@ public interface CarService {
 
     List<Car> getAllCars();
 
-    List<Car> getCountCars(Integer count);
+    List<Car> getCountCars(Integer count, String sortBy);
 }
