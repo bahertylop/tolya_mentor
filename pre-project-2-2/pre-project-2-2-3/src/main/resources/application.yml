@@ -14,13 +14,13 @@ spring:
 
 app:
   car-service:
-    max-car-count: 6
+    max-count-cars: 6
     sort-on-fields: id, model, price
   income-api-service:
     api-url: https://66055cd12ca9478ea1801f2e.mockapi.io/api/users/income
 
 loan:
-  minimalincome: 40000
-  minimalcarprice: 1000000
+  minimal-income: 40000
+  minimal-car-price: 1000000
   months-to-compute: 6
   car-price-part-to-compute: 0.3

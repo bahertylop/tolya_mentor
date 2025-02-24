@@ -1,10 +1,10 @@
 package org.example.service.impl;
 
+import lombok.RequiredArgsConstructor;
+import org.example.config.CarServiceProperties;
 import org.example.model.Car;
 import org.example.repository.CarRepository;
 import org.example.service.CarService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -13,24 +13,12 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CarServiceImpl implements CarService {
 
     private final CarRepository carRepository;
 
-    private final Integer maxCountCars;
-
-    private final List<String> sortOnFields;
-
-    @Autowired
-    public CarServiceImpl(CarRepository carRepository,
-                          @Value("${app.car-service.max-car-count}") Integer maxCountCars,
-                          @Value("${app.car-service.sort-on-fields}") List<String> sortOnFields
-    ) {
-        this.carRepository = carRepository;
-        this.maxCountCars = maxCountCars;
-        this.sortOnFields = sortOnFields;
-    }
-
+    private final CarServiceProperties properties;
 
     @Override
     public List<Car> getAllCars() {
@@ -40,14 +28,14 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public List<Car> getCountCars(Integer count, String sortBy) {
-        if (count == null || count > maxCountCars) {
-            count = maxCountCars;
+        if (count == null || count > properties.getMaxCountCars()) {
+            count = properties.getMaxCountCars();
         }
-        if (count <= 0) {
+        if (count != null && count <= 0) {
             return Collections.emptyList();
         }
 
-        if (sortBy != null && !sortOnFields.contains(sortBy)) {
+        if (sortBy != null && !properties.getSortOnFields().contains(sortBy)) {
             throw new IllegalArgumentException("не подходит поле для сортировки");
         }
 

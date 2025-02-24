@@ -1,5 +1,7 @@
 package org.example.service.impl;
 
+import lombok.RequiredArgsConstructor;
+import org.example.config.LoanServiceProperties;
 import org.example.model.Car;
 import org.example.service.UserService;
 import org.example.dto.LoanSum;
@@ -15,34 +17,14 @@ import my.starter.service.IncomeService;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class LoanServiceImpl implements LoanService {
-
-    private final int minIncomeValue;
-
-    private final int minCarPrice;
-
-    private final double carPricePartToComputeLoan;
-
-    private final int countMonthsToComputeLoan;
 
     private final IncomeService incomeService;
 
     private final UserService userService;
 
-    @Autowired
-    public LoanServiceImpl(@Value("${loan.minimalincome}") int minIncomeValue,
-                           @Value("${loan.minimalcarprice}") int minCarPrice,
-                           @Value("${loan.car-price-part-to-compute}") double carPricePartToComputeLoan,
-                           @Value("${loan.months-to-compute}") int countMonthsToComputeLoan,
-                           IncomeService incomeService,
-                           UserService userService) {
-        this.minIncomeValue = minIncomeValue;
-        this.minCarPrice =  minCarPrice;
-        this.carPricePartToComputeLoan = carPricePartToComputeLoan;
-        this.countMonthsToComputeLoan = countMonthsToComputeLoan;
-        this.incomeService = incomeService;
-        this.userService = userService;
-    }
+    private final LoanServiceProperties properties;
 
     @Override
     public LoanSum computeApplyLoanSum(Long userId) {
@@ -51,8 +33,8 @@ public class LoanServiceImpl implements LoanService {
             User user = userOp.get();
             UserIncome userIncome = incomeService.getUserIncome(userId);
             Car car = user.getCar();
-            if ((userIncome.getIncome() != null && userIncome.getIncome() > minIncomeValue) ||
-                (car != null && car.getPrice() != null && car.getPrice() >= minCarPrice)) {
+            if ((userIncome.getIncome() != null && userIncome.getIncome() > properties.getMinimalIncome()) ||
+                (car != null && car.getPrice() != null && car.getPrice() >= properties.getMinimalCarPrice())) {
                 int carPrice = 0;
                 if (car != null && car.getPrice() != null) {
                     carPrice = car.getPrice();
@@ -62,8 +44,8 @@ public class LoanServiceImpl implements LoanService {
                     income = userIncome.getIncome();
                 }
                 return new LoanSum(Math.max(
-                        countMonthsToComputeLoan * income,
-                        (int) (carPrice * carPricePartToComputeLoan)
+                        properties.getMonthsToCompute() * income,
+                        (int) (carPrice * properties.getCarPricePartToCompute())
                 ));
             }
         }
