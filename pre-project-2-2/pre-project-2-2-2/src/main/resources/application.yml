@@ -14,5 +14,5 @@ spring:
 
 app:
   car-service:
-    max-car-count: 6
+    max-count-cars: 6
     sort-on-fields: id, model, price
