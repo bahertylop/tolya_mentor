@@ -28,27 +28,23 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public LoanSum computeApplyLoanSum(Long userId) {
-        Optional<User> userOp = userService.getUserById(userId);
-        if (userOp.isPresent()) {
-            User user = userOp.get();
-            UserIncome userIncome = incomeService.getUserIncome(userId);
-            Car car = user.getCar();
-            if ((userIncome.getIncome() != null && userIncome.getIncome() > properties.getMinimalIncome()) ||
-                (car != null && car.getPrice() != null && car.getPrice() >= properties.getMinimalCarPrice())) {
-                int carPrice = 0;
-                if (car != null && car.getPrice() != null) {
-                    carPrice = car.getPrice();
-                }
-                int income = 0;
-                if (userIncome.getIncome() != null) {
-                    income = userIncome.getIncome();
-                }
-                return new LoanSum(Math.max(
-                        properties.getMonthsToCompute() * income,
-                        (int) (carPrice * properties.getCarPricePartToCompute())
-                ));
-            }
-        }
-        return new LoanSum(0);
+        return userService.getUserById(userId)
+                .map(user -> {
+                    UserIncome userIncome = incomeService.getUserIncome(userId);
+                    Car car = user.getCar();
+
+                    int income = Optional.ofNullable(userIncome.getIncome()).orElse(0);
+                    int carPrice = Optional.ofNullable(car.getPrice()).orElse(0);
+
+                    if ((income > properties.getMinimalIncome()) ||
+                            (carPrice >= properties.getMinimalCarPrice())) {
+                        return new LoanSum(Math.max(
+                                properties.getMonthsToCompute() * income,
+                                (int) (properties.getCarPricePartToCompute() * carPrice)
+                        ));
+                    }
+                    return new LoanSum(0);
+                })
+                .orElse(new LoanSum(0));
     }
 }
