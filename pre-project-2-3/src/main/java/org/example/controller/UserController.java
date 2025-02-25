@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.model.User;
 import org.example.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +23,12 @@ public class UserController {
     @PostMapping("/delete")
     public String deleteUser(@RequestParam Long id) {
         userService.deleteUser(id);
+        return "redirect:/users";
+    }
+
+    @PostMapping("/update")
+    public String updateUser(@RequestBody User updatedUser) {
+        userService.updateUser(updatedUser);
         return "redirect:/users";
     }
 }
