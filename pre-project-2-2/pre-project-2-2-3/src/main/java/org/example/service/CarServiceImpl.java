@@ -5,6 +5,7 @@ import org.example.config.CarServiceProperties;
 import org.example.model.Car;
 import org.example.repository.CarRepository;
 import org.example.service.CarService;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
