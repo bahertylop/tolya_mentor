@@ -2,6 +2,45 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Список пользователей</title>
+    <script>
+        function openEditModal(id, name, email, age) {
+            document.getElementById("editId").value = id;
+            document.getElementById("editName").value = name;
+            document.getElementById("editEmail").value = email;
+            document.getElementById("editAge").value = age;
+            document.getElementById("editModal").style.display = "block";
+        }
+
+        function closeEditModal() {
+            document.getElementById("editModal").style.display = "none";
+        }
+    </script>
+    <style>
+        /* Стили для модального окна */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            width: 300px;
+            border-radius: 10px;
+        }
+
+        .close {
+            float: right;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 <h1>Список пользователей</h1>
@@ -9,16 +48,48 @@
 <table border="1">
     <tr>
         <th>ID</th>
-        <th>name</th>
-        <th>email</th>
-        <th>age</th>
+        <th>Имя</th>
+        <th>Email</th>
+        <th>Возраст</th>
+        <th>Действия</th>
     </tr>
     <tr th:each="user : ${users}">
         <td th:text="${user.id}"></td>
         <td th:text="${user.name}"></td>
-        <td th:text="${user.age}"></td>
         <td th:text="${user.email}"></td>
+        <td th:text="${user.age}"></td>
+        <td>
+            <!-- Кнопка Удаления -->
+            <form th:action="@{/users/delete}" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${user.id}">
+                <button type="submit">Удалить</button>
+            </form>
+
+            <!-- Кнопка Редактирования -->
+            <button th:attr="onclick='openEditModal(\'' + ${user.id} + '\', \'' + ${user.name} + '\', \'' + ${user.email} + '\', \'' + ${user.age} + '\')'">
+                Редактировать
+            </button>
+        </td>
     </tr>
 </table>
+
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeEditModal()">&times;</span>
+        <h2>Редактировать пользователя</h2>
+        <form th:action="@{/users/update}" method="post">
+            <input type="hidden" id="editId" name="id">
+            <label>Имя:</label>
+            <input type="text" id="editName" name="name"><br>
+            <label>Email:</label>
+            <input type="text" id="editEmail" name="email"><br>
+            <label>Возраст:</label>
+            <input type="number" id="editAge" name="age"><br>
+            <button type="submit">Сохранить</button>
+            <button type="button" onclick="closeEditModal()">Отмена</button>
+        </form>
+    </div>
+</div>
+
 </body>
 </html>
