@@ -16,7 +16,6 @@
         }
     </script>
     <style>
-        /* Стили для модального окна */
         .modal {
             display: none;
             position: fixed;
@@ -59,13 +58,11 @@
         <td th:text="${user.email}"></td>
         <td th:text="${user.age}"></td>
         <td>
-            <!-- Кнопка Удаления -->
             <form th:action="@{/users/delete}" method="post" style="display:inline;">
                 <input type="hidden" name="id" th:value="${user.id}">
                 <button type="submit">Удалить</button>
             </form>
 
-            <!-- Кнопка Редактирования -->
             <button th:attr="onclick='openEditModal(\'' + ${user.id} + '\', \'' + ${user.name} + '\', \'' + ${user.email} + '\', \'' + ${user.age} + '\')'">
                 Редактировать
             </button>

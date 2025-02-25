@@ -20,7 +20,7 @@ public class IncomeApiService implements IncomeService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public IncomeApiService(@Value("${api.url}") String apiUrl) {
+    public IncomeApiService(String apiUrl) {
         this.apiUrl = apiUrl;
     }
 
