@@ -1,0 +1,42 @@
+1. чем автоконфигурация от обыкновенной отличается?
+
+@EnableAutoConfiguration входит в аннотацию @SpringBootApplication, автоматически создает бины,
+классы которых подтянуты из зависимостей
+
+такие классы в своем стартере загружаются в
+META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports или
+spring.factories
+
+
+3. разница между Controller Repository Service Component
+
+Controller - обработчик http запросов
+Диспетчер сканирует классы, аннотированные @Controller, и обнаруживает в них методы,
+аннотированные аннотацией @RequestMapping. Мы можем использовать @RequestMapping
+только в тех методах, классы которых аннотированы @Controller, и он НЕ будет работать
+с @Component, @Service, @Repository и т.д..
+
+Repository - работа с бд
+Аннотированный таким образом класс подходит для трансляции Spring DataAccessException
+при использовании в сочетании с постпроцессором PersistenceExceptionTranslationPostProcessor.
+Аннотированный класс также уточняется как на его роль в общей архитектуре приложения с целью инструментария,
+аспекты и т.д.
+
+По сути по аннотациям @Controller и @RestController DispatcherServlet определяет, какие классы являются
+обработчиками запросов
+
+Работа @Repository заключается в том, чтобы перехватывать исключения, специфичные для персистентности,
+и повторно создавать их как одно из унифицированных непроверенных исключений Spring.
+
+Для этого Spring предоставляет PersistenceExceptionTranslationPostProcessor, который мы должны добавить
+в контекст нашего приложения (уже включен, если мы используем Spring Boot)
+
+
+Component - помечает класс бином
+
+Service - аналог компонента, не имеет доп. логики, помечает класс бином
+
+
+4. замена контроллера на компонент, в чем было дело?
+
+spring mvc не ломался из-за аннотации @RequestMapping над классом,
