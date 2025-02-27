@@ -32,13 +32,13 @@ public class AdminController {
             return getAllUsers(model);
         }
         userService.addNewUser(createUserDto);
-        return "redirect:/admin/users";
+        return "redirect:/admin";
     }
 
     @PostMapping("/delete")
     public String deleteUser(@RequestParam Long id) {
         userService.deleteUser(id);
-        return "redirect:/admin/users";
+        return "redirect:/admin";
     }
 
     @PostMapping(path = "/update")
@@ -48,6 +48,6 @@ public class AdminController {
             return getAllUsers(model);
         }
         userService.updateUser(updatedUser);
-        return "redirect:/admin/users";
+        return "redirect:/admin";
     }
 }

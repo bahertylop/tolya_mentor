@@ -44,7 +44,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/", "/signup", "/login").permitAll()
                 .and().formLogin().loginPage("/login").failureUrl("/login?error=true")
-                .successHandler(successUserHandler);
+                .successHandler(successUserHandler)
+                .and().logout((logout) -> logout.logoutSuccessUrl("/"));
     }
 
     @Bean

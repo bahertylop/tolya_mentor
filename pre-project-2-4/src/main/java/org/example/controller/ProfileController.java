@@ -30,7 +30,7 @@ public class ProfileController {
     @PostMapping("/delete")
     public String deleteAccount(HttpServletRequest request) {
         profileService.deleteProfile(request);
-        return "redirect:/";
+        return "redirect:/logout";
     }
 
     @PostMapping("/update")
