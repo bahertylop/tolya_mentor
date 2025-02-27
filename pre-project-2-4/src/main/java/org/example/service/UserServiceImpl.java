@@ -60,7 +60,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(UserDto user) {
         // баг с почтой повторной при замене почты при редактировании аккаунта
-        if (user == null || user.getId() == null || !userRepository.existsById(user.getId())) {
+        if (user == null || user.getId() == null || user.getEmail() == null ||
+                userRepository.existsById(user.getId()) || userRepository.existsByEmail(user.getEmail())) {
             return;
         }
 

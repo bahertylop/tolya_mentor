@@ -6,10 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.model.Role;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.util.Set;
 
 @Data
@@ -25,11 +22,18 @@ public class CreateUserDto {
     @Email(message = "Некорректный формат email")
     private String email;
 
+    @NotBlank(message = "Пароль не должен быть пустым")
+    @Size(min = 8, max = 50, message = "Пароль должен содержать от 8 до 50 символов")
+    @Pattern(
+            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$",
+            message = "Пароль должен содержать хотя бы одну заглавную букву, одну строчную букву и одну цифру"
+    )
     private String password;
 
     @NotNull(message = "Возраст не должен быть пустым")
     @Min(12)
     private Integer age;
 
+    @NotNull(message = "не может не быть ролей")
     private Set<Role.ROLES> roles;
 }

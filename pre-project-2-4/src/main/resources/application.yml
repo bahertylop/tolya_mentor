@@ -12,3 +12,6 @@ spring:
       hibernate:
         enable_lazy_load_no_trans: true
         format_sql: true
+
+app:
+  password-pattern: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$
