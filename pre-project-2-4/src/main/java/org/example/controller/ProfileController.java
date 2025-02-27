@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/profile")
+@RequestMapping("/user")
 public class ProfileController {
 
     private final ProfileService profileService;
@@ -36,6 +36,6 @@ public class ProfileController {
     @PostMapping("/update")
     public String updateUserInfo(HttpServletRequest request, UpdateUserInfoRequest updateInfo) {
         profileService.updateUserInfo(request, updateInfo);
-        return "redirect:/profile";
+        return "redirect:/user";
     }
 }
