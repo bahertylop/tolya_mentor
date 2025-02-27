@@ -30,8 +30,6 @@ import java.util.Set;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final SuccessUserHandler successUserHandler;
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
 
     @Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
@@ -42,8 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable(); // попробуйте выяснить сами, что это даёт
         http.authorizeRequests()
-                .antMatchers("/user").hasAnyRole(Role.ROLES.USER.name(), Role.ROLES.ADMIN.name())
-                .antMatchers("/admin/**", "/").hasRole(Role.ROLES.ADMIN.name())
+                .antMatchers("/user").hasAnyRole("ADMIN", "USER")
+                .antMatchers("/admin/**", "/").hasRole("ADMIN")
 //                .antMatchers("/").permitAll()
                 .and().formLogin()
                 .successHandler(successUserHandler);
