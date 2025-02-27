@@ -6,12 +6,9 @@ import org.example.dto.UserDto;
 import org.example.model.User;
 import org.example.repository.RoleRepository;
 import org.example.repository.UserRepository;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -62,6 +59,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(UserDto user) {
+        // баг с почтой повторной при замене почты при редактировании аккаунта
         if (user == null || user.getId() == null || !userRepository.existsById(user.getId())) {
             return;
         }
@@ -74,14 +72,5 @@ public class UserServiceImpl implements UserService {
                         .age(user.getAge())
                         .roles(roleRepository.findByRoleIn(user.getRoles()))
                         .build());
-    }
-
-    @Override
-    public Optional<UserDto> getUserInfo(HttpServletRequest request) {
-        Authentication authentication = (Authentication) request.getUserPrincipal();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String email = userDetails.getUsername();
-        Optional<User> userOp = userRepository.getUserByEmail(email);
-        return userOp.map(UserDto::from);
     }
 }
