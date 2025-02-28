@@ -3,13 +3,17 @@ package org.example.service;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.CreateUserDto;
 import org.example.dto.UserDto;
+import org.example.dto.request.UpdateUserInfoRequest;
+import org.example.exception.IllegalRequestArgumentException;
 import org.example.exception.UserAlreadyExistsException;
+import org.example.exception.UserNotFoundException;
 import org.example.model.User;
 import org.example.repository.RoleRepository;
 import org.example.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -59,20 +63,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(UserDto user) {
-        // баг с почтой повторной при замене почты при редактировании аккаунта
-        if (user == null || user.getId() == null || user.getEmail() == null ||
-                userRepository.existsById(user.getId()) || userRepository.existsByEmail(user.getEmail())) {
-            return;
+    public User updateUser(UpdateUserInfoRequest request) {
+        if (request == null || request.getId() == null) {
+            throw new IllegalRequestArgumentException("Некорректные аргументы при обновлении пользователя");
+        }
+        Optional<UserDto> userDtoOp = getUserById(request.getId());
+
+        if (!userDtoOp.isPresent()) {
+            throw new UserNotFoundException("Пользователь с id: " + request.getId() + "не найден");
         }
 
-        userRepository.save(User.builder()
-                        .id(user.getId())
-                        .name(user.getName())
-                        .email(user.getEmail())
-                        .password(passwordEncoder.encode(user.getPassword()))
-                        .age(user.getAge())
-                        .roles(roleRepository.findByRoleIn(user.getRoles()))
+        return userRepository.save(User.builder()
+                        .id(request.getId())
+                        .name(request.getName())
+                        .email(userDtoOp.get().getEmail())
+                        .password(passwordEncoder.encode(request.getPassword()))
+                        .age(request.getAge())
+                        .roles(roleRepository.findByRoleIn(request.getRoles()))
                         .build());
     }
 }

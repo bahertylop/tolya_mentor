@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.dto.CreateUserDto;
 import org.example.dto.UserDto;
+import org.example.dto.request.UpdateUserInfoRequest;
 import org.example.model.User;
 
 import java.util.List;
@@ -17,5 +18,5 @@ public interface UserService {
 
     void deleteUser(Long id);
 
-    void updateUser(UserDto user);
+    User updateUser(UpdateUserInfoRequest request);
 }

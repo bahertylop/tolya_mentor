@@ -40,7 +40,7 @@ public class ProfileService {
             userDto.setPassword(updateInfo.getPassword());
             userDto.setName(updateInfo.getName());
             userDto.setAge(updateInfo.getAge());
-            userService.updateUser(userDto);
+//            userService.updateUser(userDto);
         }
 
     }

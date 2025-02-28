@@ -4,15 +4,20 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.model.Role;
 
 
 import javax.validation.constraints.*;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class UpdateUserInfoRequest {
+
+    @Min(value = 0, message = "id не может быть отрицательным")
+    private Long id;
 
     @NotBlank(message = "Имя не должно быть пустым")
     private String name;
@@ -28,4 +33,7 @@ public class UpdateUserInfoRequest {
     @NotNull(message = "Возраст не должен быть пустым")
     @Min(value = 12, message = "Минимальный возраст - 12 лет")
     private Integer age;
+
+    @NotNull(message = "Не может не быть ролей")
+    private Set<Role.ROLES> roles;
 }
