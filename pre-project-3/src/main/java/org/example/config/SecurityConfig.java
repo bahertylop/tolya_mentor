@@ -41,8 +41,6 @@ public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
 
-    private final SuccessUserHandler successUserHandler;
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)

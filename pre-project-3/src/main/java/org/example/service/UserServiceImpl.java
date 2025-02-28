@@ -3,6 +3,7 @@ package org.example.service;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.CreateUserDto;
 import org.example.dto.UserDto;
+import org.example.exception.UserAlreadyExistsException;
 import org.example.model.User;
 import org.example.repository.RoleRepository;
 import org.example.repository.UserRepository;
@@ -36,7 +37,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User addNewUser(CreateUserDto createUserDto) {
         if (createUserDto == null || (createUserDto.getEmail() != null && userRepository.getUserByEmail(createUserDto.getEmail()).isPresent())) {
-            throw new RuntimeException();
+            throw new UserAlreadyExistsException("Пользователь уже зарегистрирован");
         }
 
         return userRepository.save(User.builder()
