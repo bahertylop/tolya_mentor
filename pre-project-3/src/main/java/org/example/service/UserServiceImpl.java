@@ -39,6 +39,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<UserDto> getUserByEmail(String email) {
+        return userRepository.getUserByEmail(email).map(UserDto::from);
+    }
+
+    @Override
     public User addNewUser(CreateUserDto createUserDto) {
         if (createUserDto == null || (createUserDto.getEmail() != null && userRepository.getUserByEmail(createUserDto.getEmail()).isPresent())) {
             throw new UserAlreadyExistsException("Пользователь уже зарегистрирован");

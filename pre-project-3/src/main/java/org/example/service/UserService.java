@@ -14,6 +14,8 @@ public interface UserService {
 
     Optional<UserDto> getUserById(Long id);
 
+    Optional<UserDto> getUserByEmail(String email);
+
     User addNewUser(CreateUserDto createUserDto);
 
     void deleteUser(Long id);

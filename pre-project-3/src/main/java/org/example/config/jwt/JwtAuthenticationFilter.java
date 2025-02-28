@@ -1,6 +1,7 @@
 package org.example.config.jwt;
 
 
+import io.jsonwebtoken.JwtException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,22 +43,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String token = authHeader.substring(BEARER_PREFIX.length());
-        String userEmail = jwtService.extractUserEmail(token);
-        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+        try {
+            String userEmail = jwtService.extractUserEmail(token);
+            if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
 
-            if (jwtService.isTokenValid(token, userDetails)) {
-                SecurityContext context = SecurityContextHolder.createEmptyContext();
+                if (jwtService.isTokenValid(token, userDetails)) {
+                    SecurityContext context = SecurityContextHolder.createEmptyContext();
 
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                );
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                context.setAuthentication(authToken);
-                SecurityContextHolder.setContext(context);
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    context.setAuthentication(authToken);
+                    SecurityContextHolder.setContext(context);
+                }
             }
+        } catch (JwtException e) {
+
         }
         filterChain.doFilter(request, response);
     }
