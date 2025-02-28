@@ -17,16 +17,6 @@ public class SignUpServiceImpl implements SignUpService {
 
     @Override
     public void signUpUser(SignUpRequest request) {
-        Set<Role.ROLES> roles = new HashSet<>();
-        roles.add(Role.ROLES.ROLE_USER);
 
-        CreateUserDto createUserDto = CreateUserDto.builder()
-                .name(request.getName())
-                .email(request.getEmail())
-                .password(request.getPassword())
-                .age(request.getAge())
-                .roles(roles)
-                .build();
-        userService.addNewUser(createUserDto);
     }
 }

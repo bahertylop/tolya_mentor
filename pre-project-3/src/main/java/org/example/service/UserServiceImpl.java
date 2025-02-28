@@ -34,12 +34,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addNewUser(CreateUserDto createUserDto) {
+    public User addNewUser(CreateUserDto createUserDto) {
         if (createUserDto == null || (createUserDto.getEmail() != null && userRepository.getUserByEmail(createUserDto.getEmail()).isPresent())) {
-            return;
+            throw new RuntimeException();
         }
 
-        userRepository.save(User.builder()
+        return userRepository.save(User.builder()
                         .name(createUserDto.getName())
                         .email(createUserDto.getEmail())
                         .password(passwordEncoder.encode(createUserDto.getPassword()))

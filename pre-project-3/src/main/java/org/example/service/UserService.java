@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.dto.CreateUserDto;
 import org.example.dto.UserDto;
+import org.example.model.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +13,7 @@ public interface UserService {
 
     Optional<UserDto> getUserById(Long id);
 
-    void addNewUser(CreateUserDto createUserDto);
+    User addNewUser(CreateUserDto createUserDto);
 
     void deleteUser(Long id);
 
