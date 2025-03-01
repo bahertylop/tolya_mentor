@@ -78,13 +78,19 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException("Пользователь с id: " + request.getId() + "не найден");
         }
 
-        return userRepository.save(User.builder()
-                        .id(userDtoOp.get().getId())
-                        .name(request.getName())
-                        .email(userDtoOp.get().getEmail())
-                        .password(passwordEncoder.encode(request.getPassword()))
-                        .age(request.getAge())
-                        .roles(roleRepository.findByRoleIn(request.getRoles()))
-                        .build());
+        User user = User.builder()
+                .id(userDtoOp.get().getId())
+                .name(request.getName())
+                .email(userDtoOp.get().getEmail())
+                .age(request.getAge())
+                .roles(roleRepository.findByRoleIn(request.getRoles()))
+                .build();
+        if (request.getPassword() == null) {
+            user.setPassword(userDtoOp.get().getPassword());
+        } else {
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
+
+        return userRepository.save(user);
     }
 }

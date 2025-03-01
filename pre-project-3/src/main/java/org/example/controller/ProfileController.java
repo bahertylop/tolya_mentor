@@ -2,6 +2,7 @@ package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.dto.UserDto;
+import org.example.dto.request.UpdateProfileRequest;
 import org.example.dto.request.UpdateUserInfoRequest;
 import org.example.dto.response.ProfileResponse;
 import org.example.service.ProfileService;
@@ -35,7 +36,7 @@ public class ProfileController {
     }
 
     @PostMapping("/update")
-    public void updateUserInfo(@RequestBody @Validated UpdateUserInfoRequest updateInfo,
+    public void updateUserInfo(@RequestBody @Validated UpdateProfileRequest updateInfo,
                                @AuthenticationPrincipal UserDetails userDetails) {
         profileService.updateUserInfo(userDetails, updateInfo);
     }

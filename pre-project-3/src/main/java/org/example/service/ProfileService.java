@@ -2,6 +2,7 @@ package org.example.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.dto.UserDto;
+import org.example.dto.request.UpdateProfileRequest;
 import org.example.dto.request.UpdateUserInfoRequest;
 import org.example.dto.response.ProfileResponse;
 import org.example.exception.IllegalRequestArgumentException;
@@ -59,9 +60,15 @@ public class ProfileService {
         userService.deleteUser(user.getId());
     }
 
-    public void updateUserInfo(UserDetails userDetails, UpdateUserInfoRequest updateInfo) {
+    public void updateUserInfo(UserDetails userDetails, UpdateProfileRequest updateInfo) {
         User user = (User) userDetails;
-        updateInfo.setId(user.getId());
-        userService.updateUser(updateInfo);
+        UpdateUserInfoRequest updateRequest = UpdateUserInfoRequest.builder()
+                .id(user.getId())
+                .name(updateInfo.getName())
+                .password(updateInfo.getPassword())
+                .age(updateInfo.getAge())
+                .roles(user.getRoles().stream().map(Role::getRole).collect(Collectors.toSet()))
+                .build();
+        userService.updateUser(updateRequest);
     }
 }
