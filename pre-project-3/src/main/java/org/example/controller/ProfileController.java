@@ -26,22 +26,17 @@ public class ProfileController {
 
     @GetMapping
     public ProfileResponse getProfile(@AuthenticationPrincipal UserDetails userDetails) {
-        return profileService.getUserInfo(userDetails.getUsername());
+        return profileService.getUserInfo(userDetails);
     }
 
     @PostMapping("/delete")
-    public String deleteAccount(HttpServletRequest request) {
-        profileService.deleteProfile(request);
-        return "redirect:/logout";
+    public void deleteAccount(@AuthenticationPrincipal UserDetails userDetails) {
+        profileService.deleteProfile(userDetails);
     }
 
     @PostMapping("/update")
-    public String updateUserInfo(HttpServletRequest request, @ModelAttribute @Validated UpdateUserInfoRequest updateInfo, BindingResult bindingResult, Model model) {
-//        if (bindingResult.hasErrors()) {
-//            model.addAttribute("errors", bindingResult.getAllErrors());
-//            return getProfile(request, model);
-//        }
-//        profileService.updateUserInfo(request, updateInfo);
-        return "redirect:/user";
+    public void updateUserInfo(@RequestBody @Validated UpdateUserInfoRequest updateInfo,
+                               @AuthenticationPrincipal UserDetails userDetails) {
+        profileService.updateUserInfo(userDetails, updateInfo);
     }
 }

@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
-            return;
+            throw new UserNotFoundException("Пользователь с id: " + id + " не найден");
         }
         userRepository.deleteById(id);
     }
@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
         }
 
         return userRepository.save(User.builder()
-                        .id(request.getId())
+                        .id(userDtoOp.get().getId())
                         .name(request.getName())
                         .email(userDtoOp.get().getEmail())
                         .password(passwordEncoder.encode(request.getPassword()))

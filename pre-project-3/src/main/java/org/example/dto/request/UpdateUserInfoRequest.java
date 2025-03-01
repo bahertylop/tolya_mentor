@@ -16,7 +16,6 @@ import java.util.Set;
 @Builder
 public class UpdateUserInfoRequest {
 
-    @Min(value = 0, message = "id не может быть отрицательным")
     private Long id;
 
     @NotBlank(message = "Имя не должно быть пустым")
