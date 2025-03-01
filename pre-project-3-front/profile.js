@@ -1,7 +1,7 @@
 $(document).ready(function () {
     const token = localStorage.getItem('jwtToken');
     if (!token) {
-        window.location.href = "index.html";
+        window.location.href = "home.html";
         return;
     }
 
@@ -26,7 +26,7 @@ $(document).ready(function () {
             error: function () {
                 alert("Ошибка загрузки профиля.");
                 localStorage.removeItem('jwtToken');
-                window.location.href = "index.html";
+                window.location.href = "home.html";
             }
         });
     }
@@ -44,7 +44,6 @@ $(document).ready(function () {
         const password = $("#editPassword").val();
         const age = $("#editAge").val();
 
-        // Отправляем запрос на обновление
         $.ajax({
             url: 'http://localhost:8080/user/update',
             method: 'POST',
@@ -57,7 +56,15 @@ $(document).ready(function () {
                 $('#editProfileModal').modal('hide');
             },
             error: function (xhr) {
-                alert("Ошибка при обновлении профиля: " + xhr.responseText);
+                $('#editProfileModal .modal-body .alert').remove();
+                const errors = xhr.responseJSON;
+                let errorMessages = '';
+                if (errors) {
+                    errors.forEach(error => {
+                        errorMessages += `<p>${error.message}</p>`;
+                    });
+                }
+                $('#editProfileModal .modal-body').append(`<div class="alert alert-danger mt-3">${errorMessages}</div>`);
             }
         });
     });

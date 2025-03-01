@@ -25,7 +25,6 @@
         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createUserModal">Создать пользователя</button>
     </div>
 
-    <!-- Таблица пользователей -->
     <table class="table table-striped">
         <thead>
         <tr>
@@ -38,12 +37,10 @@
         </tr>
         </thead>
         <tbody id="userTableBody">
-        <!-- Данные пользователей будут добавлены динамически -->
         </tbody>
     </table>
 </div>
 
-<!-- Модальное окно для создания пользователя -->
 <div class="modal fade" id="createUserModal" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -89,7 +86,6 @@
     </div>
 </div>
 
-<!-- Модальное окно для редактирования пользователя -->
 <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -99,7 +95,7 @@
             </div>
             <div class="modal-body">
                 <form id="editUserForm">
-                    <input type="hidden" id="editUserId"> <!-- Скрытое поле для ID пользователя -->
+                    <input type="hidden" id="editUserId">
                     <div class="mb-3">
                         <label for="editUserName" class="form-label">Имя</label>
                         <input type="text" class="form-control" id="editUserName" required>

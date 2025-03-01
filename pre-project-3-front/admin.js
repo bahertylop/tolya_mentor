@@ -1,8 +1,6 @@
 $(document).ready(function () {
-    // Токен для аутентификации
     const token = localStorage.getItem('jwtToken');
 
-    // Функция для получения всех пользователей
     function fetchUsers() {
         $.ajax({
             url: 'http://localhost:8080/admin',
@@ -10,7 +8,7 @@ $(document).ready(function () {
             headers: {'Authorization': 'Bearer ' + token},
             success: function (response) {
                 let tableBody = $("#userTableBody");
-                tableBody.empty(); // Очистить таблицу перед вставкой новых данных
+                tableBody.empty();
 
                 response.forEach(user => {
                     tableBody.append(`
@@ -34,7 +32,6 @@ $(document).ready(function () {
         });
     }
 
-    // Функция для удаления пользователя
     window.deleteUser = function (id) {
         $.ajax({
             url: 'http://localhost:8080/admin/delete',
@@ -51,7 +48,6 @@ $(document).ready(function () {
         });
     }
 
-    // Функция для открытия модального окна редактирования пользователя
     window.editUser = function (id) {
         // Находим строку с нужным ID
         const row = $(`#userTableBody tr[data-id="${id}"]`);
@@ -60,13 +56,11 @@ $(document).ready(function () {
         const age = row.find(".user-age").text();
         const roles = row.find(".user-roles").text();
 
-        // Заполняем форму редактирования
-        $("#editUserId").val(id); // Устанавливаем ID пользователя
+        $("#editUserId").val(id);
         $("#editUserName").val(name);
         $("#editUserEmail").val(email);
         $("#editUserAge").val(age);
 
-        // Устанавливаем чекбоксы в зависимости от ролей
         if (roles.includes("ROLE_USER")) {
             $("#roleUserEdit").prop("checked", true);
         } else {
@@ -79,11 +73,9 @@ $(document).ready(function () {
             $("#roleAdminEdit").prop("checked", false);
         }
 
-        // Открываем модальное окно
         $('#editUserModal').modal('show');
     }
 
-    // Функция для редактирования пользователя
     $("#editUserForm").submit(function (event) {
         event.preventDefault();
 
@@ -112,15 +104,22 @@ $(document).ready(function () {
             success: function () {
                 alert("Пользователь обновлён!");
                 $('#editUserModal').modal('hide');
-                fetchUsers(); // Обновляем таблицу
+                fetchUsers();
             },
-            error: function () {
-                alert("Ошибка при обновлении пользователя.");
+            error: function (xhr) {
+                $('#editUserModal .modal-body .alert').remove();
+                const errors = xhr.responseJSON;
+                let errorMessages = '';
+                if (errors) {
+                    errors.forEach(error => {
+                        errorMessages += `<p>${error.message}</p>`;
+                    });
+                }
+                $('#editUserModal .modal-body').append(`<div class="alert alert-danger mt-3">${errorMessages}</div>`);
             }
         });
     });
 
-    // Функция для создания пользователя
     $("#createUserForm").submit(function (event) {
         event.preventDefault();
 
@@ -145,10 +144,18 @@ $(document).ready(function () {
             success: function () {
                 alert("Пользователь создан!");
                 $('#createUserModal').modal('hide');
-                fetchUsers(); // Обновляем таблицу
+                fetchUsers();
             },
-            error: function () {
-                alert("Ошибка при создании пользователя.");
+            error: function (xhr) {
+                $('#createUserModal .modal-body .alert').remove();
+                const errors = xhr.responseJSON;
+                let errorMessages = '';
+                if (errors) {
+                    errors.forEach(error => {
+                        errorMessages += `<p>${error.message}</p>`;
+                    });
+                }
+                $('#createUserModal .modal-body').append(`<div class="alert alert-danger mt-3">${errorMessages}</div>`);
             }
         });
     });
